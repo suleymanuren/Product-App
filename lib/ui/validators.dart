@@ -6,22 +6,11 @@ extension EmailValidator on String {
   }
 }
 
-
-
-
 extension validateStructure on String {
   bool isValidPassword() {
-            String  pattern = r'^(?=.*?[a-z])(?=.*?[0-9]).{6,20}$';
-        RegExp regExp = new RegExp(pattern);
+    String pattern = r'^(?=.*?[a-z])(?=.*?[0-9]).{6,20}$';
+    RegExp regExp = new RegExp(pattern);
 
-            return regExp.hasMatch(this);
-
+    return regExp.hasMatch(this);
   }
 }
-
-
-
-
-
-
-
