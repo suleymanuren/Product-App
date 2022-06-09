@@ -16,14 +16,7 @@ class ProductDetail extends StatefulWidget {
 
   ProductDetail({Key? key}) : super(key: key);
 
-  //final String? imgUrl;
-  // final String? shortTitle;
-  //final String? longDescription;
-  //final String? bedroomCount;
-  //final String? bathroomCount;
-  //final String? maxPeople;
-  //final String? price;
-  //final String? adres;
+
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
