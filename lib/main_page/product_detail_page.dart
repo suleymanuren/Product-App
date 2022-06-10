@@ -2,27 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:get/get.dart';
-
 import '../models/product_models.dart';
 import '../provider/product_provider.dart';
 import '../ui/responsive.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-class ProductDetail extends StatefulWidget {
-  static String routeName = "/ProductDetail";
+class ProductDetailPage extends StatefulWidget {
+  static String routeName = "/ProductDetailPage";
 
-  ProductDetail({Key? key}) : super(key: key);
-
-
-
+  ProductDetailPage({Key? key}) : super(key: key);
   @override
-  _ProductDetailState createState() => _ProductDetailState();
+  _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
-class _ProductDetailState extends State<ProductDetail> {
+class _ProductDetailPageState extends State<ProductDetailPage> {
   Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
   @override
@@ -46,19 +40,16 @@ class _ProductDetailState extends State<ProductDetail> {
             future: context.read<ProductProvider>().searchProductStateRequest(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               //TÜRKÇE
 
               return Consumer<ProductProvider>(
-                builder: (
-                  context,
-                  value,
-                  child,
-                ) {
-                  return Stack(
+                  builder: (BuildContext context, value, Widget? child) {
+                return Container(
+                  child: Stack(
                     children: [
                       Positioned(
                         top: 0,
@@ -69,7 +60,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             //color: Colors.yellow,
                             image: DecorationImage(
                                 image: AssetImage(
-                                    "static/${value.productStateModel.products?[2].id}.jpeg"),
+                                    "static/${value.productStateModel.products?[1].id.toString()}.jpeg"),
                                 fit: BoxFit.cover),
                           ),
                         ),
@@ -81,13 +72,13 @@ class _ProductDetailState extends State<ProductDetail> {
                           width: SizeConfig.screenWidth,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(40.0),
                               topLeft: Radius.circular(40.0),
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  offset: Offset(0, -2),
+                                  offset: const Offset(0, -2),
                                   color: Colors.black.withOpacity(.4),
                                   blurRadius: 10.0),
                             ],
@@ -99,11 +90,11 @@ class _ProductDetailState extends State<ProductDetail> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(
-                                    height: 15.0,
+                                  SizedBox(
+                                    height: SizeConfig.screenHeight * .02,
                                   ),
                                   Container(
-                                    height: SizeConfig.screenHeight * .043,
+                                    height: SizeConfig.screenHeight * .08,
                                     width: SizeConfig.screenWidth,
                                     child: Row(
                                       mainAxisAlignment:
@@ -112,18 +103,17 @@ class _ProductDetailState extends State<ProductDetail> {
                                         Flexible(
                                           flex: 3,
                                           child: Container(
+                                            color: Colors.white,
+                                            height: 100,
+                                            width: SizeConfig.screenWidth,
                                             child: Text(
-                                              "${value.productStateModel.products?[2].name.toString() ?? "boş değer döndü"}",
-                                              //arg['shortTitle'],
+                                              textAlign: TextAlign.start,
+                                              " ${value.productStateModel.products?[1].name.toString()}",
                                               style: TextStyle(
-                                                  color: Colors.black,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: SizeConfig
-                                                          .screenWidth *
-                                                      .07 //,overflow: TextOverflow.ellipsis
-                                                  ),
+                                                fontSize:
+                                                    SizeConfig.screenWidth *
+                                                        .05,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -131,23 +121,21 @@ class _ProductDetailState extends State<ProductDetail> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 5.0,
+                                    height: SizeConfig.screenHeight * .02,
                                   ),
                                   Text(
                                     value.productStateModel.products?[2].price
                                                 .toString() !=
                                             null
-                                        ? "${value.productStateModel.products?[2].price.toString()}" +
+                                        ? "${value.productStateModel.products?[1].price.toString()}" +
                                             " TL"
                                         : "boş değer döndü",
-
-                                    //"${arg['price']} tl den başlayan fiyatlarla",
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w300,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: SizeConfig.screenWidth * .04),
                                   ),
                                   SizedBox(
-                                    height: 10.0,
+                                    height: SizeConfig.screenHeight * .02,
                                   ),
                                   Container(
                                     height: SizeConfig.screenHeight * .03,
@@ -162,17 +150,19 @@ class _ProductDetailState extends State<ProductDetail> {
                                           size: SizeConfig.screenWidth * .04,
                                         ),
                                         SizedBox(
-                                          width: 5.0,
+                                          height: SizeConfig.screenHeight * .03,
+                                          width: SizeConfig.screenWidth * .01,
                                         ),
                                         Container(
                                             height:
-                                                SizeConfig.screenHeight * .03,
+                                                SizeConfig.screenHeight * .06,
                                             width: SizeConfig.screenWidth * .8,
                                             // color: Colors.green,
                                             child: Text(
-                                              " ${value.productStateModel.products?[2].timeStamp.toString() ?? "" + "boş değer döndü"}",
+                                              " ${value.productStateModel.products?[1].timeStamp.toString() ?? "" + "boş değer döndü"}",
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
                                                   fontSize:
                                                       SizeConfig.screenWidth *
                                                           .04,
@@ -183,15 +173,15 @@ class _ProductDetailState extends State<ProductDetail> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 10.0,
+                                    height: SizeConfig.screenHeight * .02,
                                   ),
                                   Container(
                                     color: Colors.red,
-                                    height: 300,
+                                    height: SizeConfig.screenHeight * .35,
                                     width: SizeConfig.screenWidth,
                                     child: Text(
                                       textAlign: TextAlign.start,
-                                      " ${value.productStateModel.products?[2].description.toString()}",
+                                      " ${value.productStateModel.products?[1].description.toString()}",
                                       style: TextStyle(
                                         fontSize: SizeConfig.screenWidth * .06,
                                       ),
@@ -218,13 +208,13 @@ class _ProductDetailState extends State<ProductDetail> {
                               borderRadius: BorderRadius.circular(10.0),
                               boxShadow: [
                                 BoxShadow(
-                                  offset: Offset(0, 2),
+                                  offset: const Offset(0, 2),
                                   blurRadius: 10.0,
                                   color: Colors.black.withOpacity(.4),
                                 ),
                               ],
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Icon(
                                 Icons.arrow_back_outlined,
                                 color: Colors.white,
@@ -234,9 +224,9 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                     ],
-                  );
-                },
-              );
+                  ),
+                );
+              });
             }),
       ),
     );

@@ -1,15 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:product_app/models/product_detail_model.dart';
+import 'package:product_app/services/product_detail_service.dart';
 
-import '../services/product_detail_service.dart';
+
 
 class ProductDetailProvider extends ChangeNotifier {
-  ProductDetailModel productDetailStateModel = ProductDetailModel();
-  SearchDetailApiService searchSDetailtateService = SearchDetailApiService();
+  ProductDetailModel denemeStateModel = ProductDetailModel();
+  ProductDetailsApiService denemeStateService = ProductDetailsApiService();
+  //bool loading=false;
+  denemeStateRequest() async {
+    //  loading=true;
+    await denemeStateService.getProductDetailModel().then((value) => {
+      denemeStateModel.product = value.product,
 
-  searchProductDetailStateRequest() async =>
-      searchSDetailtateService.getProductDetail().then((value) => {
-            productDetailStateModel.product = value.product,
-            notifyListeners(),
-          });
+      notifyListeners(),
+    });
+    //loading =false;
+    // notifyListeners();
+  }
 }

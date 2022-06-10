@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/product_models.dart';
 import '../provider/product_provider.dart';
 import '../services/product_service.dart';
-import '../screens/product_detail_page.dart';
+import 'product_detail_page.dart';
 import '../ui/responsive.dart';
 Future<void> saveData(productID) async {
   // productID hafızaya yazdıran fonksiyon

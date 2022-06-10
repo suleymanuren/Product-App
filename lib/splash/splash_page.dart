@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../login/register/login_page.dart';
+import '../main_page/main_page.dart';
 import '../ui/responsive.dart';
 
 class SplashPage extends StatefulWidget {
+  
   static String routeName = "/SplashPage";
   const SplashPage({Key? key}) : super(key: key);
 
@@ -11,17 +14,21 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  bool? isLogging;
 
   @override
   initState() {
+    // TODO: implement initState
     super.initState();
     saveSharedLoggingControl();
   }
+  
+
 
   Future saveSharedLoggingControl() async {
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+    Future.delayed(Duration(seconds: 3), () {
+     //Navigator.pushReplacementNamed(context, BottomAppBarPage.routeName);
+     Navigator.pushReplacementNamed(context, LoginPage.routeName);
+
     });
   }
 

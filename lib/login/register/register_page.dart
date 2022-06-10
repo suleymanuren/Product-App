@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:product_app/ui/responsive.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import '../../main_page/main_page.dart';
+import '../../ui/register_password_doesnt_match.dart';
 import '../../ui/validators.dart';
 import 'login_page.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import 'dart:convert';
 
@@ -17,56 +19,76 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+const snackBar = SnackBar(
+  content: Text('Ürün Sepete Eklendi'),
+);
+
 class _RegisterPageState extends State<RegisterPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController surnameController = TextEditingController();
   TextEditingController telephoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
   TextEditingController repasswordController = TextEditingController();
-  final formGlobalKey = GlobalKey<FormState>();
-  bool _isChecked = false;
+  final _formKey = GlobalKey<FormState>();
   bool _isObscure1 = true;
   bool _isObscure2 = true;
-  var validate = AutovalidateMode.disabled;
 
-  var maskFormatter = new MaskTextInputFormatter(
+  var maskFormatter =  MaskTextInputFormatter(
       mask: '+## (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text('AppBar'),
+        leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }), 
+      ),
       body: Form(
-        key: formGlobalKey,
+        key: _formKey,
         child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: ListView(
               children: <Widget>[
                 Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    child: Text(
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
                       'E-Katalog',
-                      style: TextStyle(
+                      style:  TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
                     )),
                 Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    child: Text(
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
                       'KAYIT',
                       style: TextStyle(fontSize: 20),
                     )),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Form(
                     autovalidateMode: AutovalidateMode.always,
                     child: TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Lütfen isim giriniz';
+                        }
+                        return null;
+                      },
                       controller: nameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'İsim',
                       ),
@@ -77,13 +99,17 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: SizeConfig.screenHeight * .015,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    inputFormatters: [],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen soyisim giriniz';
+                      }
+                      return null;
+                    },
                     obscureText: false,
                     controller: surnameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Soyisim',
                     ),
@@ -93,14 +119,19 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: SizeConfig.screenHeight * .015,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen telefon numarası giriniz';
+                      }
+                      return null;
+                    },
                     keyboardType: TextInputType.number,
                     inputFormatters: [maskFormatter],
                     obscureText: false,
                     controller: telephoneController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Telefon No',
                     ),
@@ -110,15 +141,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: SizeConfig.screenHeight * .015,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (input) => input!.isValidEmail()
                         ? null
                         : "Geçerli bir email giriniz",
                     obscureText: false,
                     controller: emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Mail',
                     ),
@@ -128,9 +158,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: SizeConfig.screenHeight * .015,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     obscureText: _isObscure1,
                     validator: (input) => input!.isValidPassword()
                         ? null
@@ -148,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               _isObscure1 = !_isObscure1;
                             });
                           }),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: 'Şifrenizi Giriniz',
                     ),
                   ),
@@ -157,9 +186,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: SizeConfig.screenHeight * .015,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     obscureText: _isObscure2,
                     validator: (input) => input!.isValidPassword()
                         ? null
@@ -177,42 +205,58 @@ class _RegisterPageState extends State<RegisterPage> {
                               _isObscure2 = !_isObscure2;
                             });
                           }),
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       labelText: 'Şifrenizi Tekrar Giriniz',
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: SizeConfig.screenHeight * .075,
+                  height: SizeConfig.screenHeight * .04,
                 ),
                 Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    height: SizeConfig.screenHeight * .06,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
-                      child: Text('Kayıt Ol'),
+                      child: const Text('Kayıt Ol'),
                       onPressed: () async {
                         setState(() {});
-                        if (nameController.value.text == "" ||
-                            surnameController.value.text == "" ||
-                            telephoneController.value.text == "" ||
-                            emailController.value.text == "" ||
-                            passwordController.value.text == "" ||
-                            repasswordController.value.text == "") {
-                          print("hata");
-                        } else if (passwordController.text !=
-                            repasswordController.text) {
-                          print("form düzgün ama şifreler eşleşmedi");
+                        if (_formKey.currentState!.validate()) {
+                          if (nameController.value.text == "" ||
+                              surnameController.value.text == "" ||
+                              telephoneController.value.text == "" ||
+                              emailController.value.text == "" ||
+                              passwordController.value.text == "" ||
+                              repasswordController.value.text == "") {
+                            //print("hata");
+                          } else if (passwordController.text !=
+                              repasswordController.text) {
+                            //print("form düzgün ama şifreler eşleşmedi");
+                            return showAlertDialogNotMatchPassword(context);
+                          } else {
+                            showTopSnackBar(
+                              context,
+                              const CustomSnackBar.success(
+                                message: "Kayıt başarılı!!",
+                              ),
+                            );
+                            Future.delayed(const Duration(seconds: 3), () {
+                              Navigator.pushReplacementNamed(
+                                  context, MainPage.routeName);
+                            });
+
+                            register(nameController.text,
+                                passwordController.text, emailController.text);
+                          }
                         } else {
-                          register(nameController.text, passwordController.text,
-                              emailController.text);
+                          //print("hata");
                         }
                       },
                     )),
                 Row(
                   children: <Widget>[
-                    Text('Hesabınız var mı?'),
+                    const Text('Hesabınız var mı?'),
                     TextButton(
-                      child: Text(
+                      child: const Text(
                         'Giriş Yap',
                         style: TextStyle(fontSize: 15),
                       ),
@@ -236,7 +280,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'password': passwordController.text,
       'email': emailController.text,
     };
-    print(data);
+    //print(data);
 
     String body = json.encode(data);
     var url = 'https://assignment-api.piton.com.tr/api/v1/user/register';
@@ -249,13 +293,13 @@ class _RegisterPageState extends State<RegisterPage> {
         "Access-Control-Allow-Origin": "*"
       },
     );
-    print(response.body);
-    print(response.statusCode);
+    //print(response.body);
+    //print(response.statusCode);
     if (response.statusCode == 200) {
       //Or put here your next screen using Navigator.push() method
-      print('success');
+      //print('success');
     } else {
-      print('error');
+      //print('error');
     }
   }
 }

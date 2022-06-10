@@ -1,8 +1,4 @@
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/product_models.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,7 +21,7 @@ class SearchApiService {
     List<dynamic> body = json['products'];
     List<Products> searchProductsList =
         body.map((dynamic item) => Products.fromJson(item)).toList();
-    print("GELEN VERİ ADEDİ${searchProductsList.length}");
+    //print("GELEN VERİ ADEDİ${searchProductsList.length}");
     allProducts.products = searchProductsList;
 
     return allProducts;

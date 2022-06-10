@@ -1,17 +1,21 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:product_app/models/product_detail_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:http/http.dart' as http;
 
-import '../models/product_detail_model.dart';
 
-class SearchDetailApiService {
-  ProductDetailModel productDetail = ProductDetailModel();
+class ProductDetailsApiService {
+  Future<ProductDetailModel> getProductDetailModel() async {
+        var sharedPreferences = await SharedPreferences.getInstance(); // product id çekmek için
+    final String? counter = sharedPreferences.getString('counter'); // product id çekmek için
+    var url = 'https://assignment-api.piton.com.tr/api/v1/product/get/$counter';
+print("kaydedilen product id $counter");
 
-  Future getProductDetail() async {
-    var url = 'https://assignment-api.piton.com.tr/api/v1/product/get/2';
+
+    ProductDetailModel productDetailTest = ProductDetailModel();
 
     var response = await http.get(
       Uri.parse(url),
@@ -22,12 +26,15 @@ class SearchDetailApiService {
         'Content-Type': 'application/json-patch+json',
       },
     );
-    Map<String, dynamic> json = jsonDecode(response.body);
+    if (response.statusCode == 200) {
 
-    List<dynamic> productList = json['product'];
-    List<Product> product =
-        productList.map((dynamic item) => Product.fromJson(item)).toList();
+      Map<String, dynamic> json =jsonDecode(response.body);
+      productDetailTest.product = Product.fromJson(json['product']);
 
-    return productDetail;
+print("gelen veri$productDetailTest");
+      return productDetailTest;
+    }
+    throw Exception();
   }
 }
+

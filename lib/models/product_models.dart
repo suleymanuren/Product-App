@@ -7,15 +7,15 @@ class AllProducts {
     if (json['products'] != null) {
       products = <Products>[];
       json['products'].forEach((v) {
-        products!.add(new Products.fromJson(v));
+        products!.add( Products.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.products != null) {
-      data['products'] = this.products!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
+    if (products != null) {
+      data['products'] = products!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -48,12 +48,12 @@ class Products {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['price'] = this.price;
-    data['image'] = this.image;
-    data['description'] = this.description;
-    data['timeStamp'] = this.timeStamp;
+    data['id'] = id;
+    data['name'] = name;
+    data['price'] = price;
+    data['image'] = image;
+    data['description'] = description;
+    data['timeStamp'] = timeStamp;
     return data;
   }
 }

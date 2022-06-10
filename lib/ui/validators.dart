@@ -6,10 +6,11 @@ extension EmailValidator on String {
   }
 }
 
+// ignore: camel_case_extensions
 extension validateStructure on String {
   bool isValidPassword() {
     String pattern = r'^(?=.*?[a-z])(?=.*?[0-9]).{6,20}$';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp = RegExp(pattern);
 
     return regExp.hasMatch(this);
   }

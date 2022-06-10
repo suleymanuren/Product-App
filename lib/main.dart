@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:product_app/login/register/login_page.dart';
 import 'package:product_app/provider/product_detail_provider.dart';
 import 'package:product_app/provider/product_provider.dart';
+import 'package:product_app/splash/splash_page.dart';
+import 'package:product_app/provider/product_detail_provider.dart';
 import 'package:product_app/ui/routes.dart';
 import 'package:provider/provider.dart';
 
-import 'main_page/main_page.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: SplashPage(),
         routes: routes,
       ),
     );
