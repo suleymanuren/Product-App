@@ -1,15 +1,15 @@
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:product_app/models/product_detail_model.dart';
 import 'package:product_app/provider/product_detail_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'package:get/get.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../ui/responsive.dart';
+import '../../ui/responsive.dart';
+import 'package:http/http.dart' as http;
+
+int? like;
+List<Likes>? likes;
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -17,8 +17,6 @@ class ProductDetailPage extends StatefulWidget {
   static String routeName = "/ProductDetailPage";
 
   ProductDetailPage({Key? key}) : super(key: key);
-
-
 
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();
@@ -31,23 +29,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    
-
     ProductDetailModel productDetailModel = ProductDetailModel();
     SizeConfig().init(context);
+
     return Scaffold(
         key: _scaffoldKey,
         body: Container(
             height: SizeConfig.screenHeight,
             width: SizeConfig.screenWidth,
             child: FutureBuilder(
-                future: context
-                    .read<ProductDetailProvider>()
-                    .denemeStateRequest(),
+                future:
+                    context.read<ProductDetailProvider>().denemeStateRequest(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Center(
@@ -240,8 +237,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           Positioned(
                             top: SizeConfig.screenHeight * .28,
                             right: SizeConfig.screenWidth * .05,
-                            child: GestureDetector(
-                              onTap: () {},
+                            child: InkWell(
+                              onTap: () async {
+                                var sharedPreferences = await SharedPreferences
+                                    .getInstance(); // product id çekmek için
+                                final String? counter =
+                                    sharedPreferences.getString('counter');
+                                Map data = {
+                                  'productId': counter,
+                                };
+
+                                String body = json.encode(data);
+                                var url =
+                                    'https://assignment-api.piton.com.tr/api/v1/product/like';
+                                var response = await http.post(
+                                  Uri.parse(url),
+                                  body: body,
+                                  headers: {
+                                    'accept': 'application/json',
+                                    'access-token':
+                                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN1bGV5bWFudXJlbjA3QGdtYWlsLmNvbSIsImlhdCI6MTY1NDY1NTIzNSwiZXhwIjoxNjgwNTc1MjM1fQ.L3t4E-x-IWlT1wjRx3WNzp-ecX-MsntIl-tRiD9zZmg',
+                                    'Content-Type': 'application/json',
+                                  },
+                                );
+                                print(response.body);
+                                if (response.statusCode == 200) {
+                                          var sharedPreferences = await SharedPreferences.getInstance(); // product id çekmek için
+
+
+                                } else {
+                                  //print('error');
+                                }
+                              },
                               child: Container(
                                 height: SizeConfig.screenHeight * .055,
                                 width: SizeConfig.screenWidth * .13,
@@ -255,6 +282,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     ]),
                                 child: Center(
                                   child: Icon(
+                                    
                                     Icons.favorite,
                                     size: SizeConfig.screenHeight * .027,
                                     color: Colors.white,

@@ -11,7 +11,7 @@ import '../../ui/responsive.dart';
 import '../../ui/validators.dart';
 import 'package:http/http.dart' as http;
 
-String? userKey;
+String? userToken;
 const snackBar = SnackBar(
   content: Text('Ürün Sepete Eklendi'),
 );
@@ -22,13 +22,14 @@ class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
-  _storeOnboardInfo() async {
-    print("Shared pref called");
-    int isViewed = 0;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('token', isViewed);
-    print(prefs.getInt('token'));
-  }
+
+_storeOnboardInfo(userToken) async {
+  print("Shared pref called");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', userToken);
+  print(prefs.getString('token'));
+}
+
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -138,7 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       child: const Text('Login'),
                       onPressed: () async {
-
                         if (_formKey.currentState!.validate()) {
                           //String? userToken;
                           Map data = {
@@ -161,23 +161,51 @@ class _LoginPageState extends State<LoginPage> {
                           );
                           //print("${response.body}");
                           if (response.statusCode == 200) {
-                            setState(()   {
+                            setState(() {
                               Map<String, dynamic> json =
                                   jsonDecode(response.body);
                               if (response.body.length > 15) {
                                 var userToken = json['token'];
+                                //BAŞARISIZ GİRİŞLERDE "token" BOŞ DÖNDÜĞÜ İÇİN GİRİŞİN BAŞARILI OLUP OLMADIĞINI ANCAK DÖNEN VERİRİN UZUNLUĞU İLE KIYASLAYABİLCEĞİMİ DÜŞÜNDÜM
+                                // BU ŞEKİLDE KONTROL İLE DÖNEN VERİ 15 TEN UZUN OLDUĞU SÜRECE BAŞARILI GİRİŞ OLARAK GÖRÜLÜP HEM LOGİN İŞLEMİ TAMAMLANIYOR HEM DE
+                                // KULLANICI GİRİŞİNDEN DÖNEN TOKEN HAFIZAYA KAYDEDİLİYOR
+                                _storeOnboardInfo(userToken);
+
                                 return userToken;
-                              } else {
-                              }
+                              } else {}
                             });
-                          } else {
-                          }
+                          } else {}
 
                           if (response.body.length < 20) {
                             //print("giriş başarısız");
 
                             return showAlertDialog(context);
-                          } else {
+                          } else if (_isChecked == true) {
+                            //BENİ HATIRLA KONTROLÜ SAĞLANIYOR VE KULLANICI BENİ HATIRLAYI İŞARETLEDİYSE GİRİŞ DEVAM EDİYOR
+
+                            print("token kaydedildi");
+                            showTopSnackBar(
+                              context,
+                              const CustomSnackBar.success(
+                                message: "Giriş başarılı!!",
+                              ),
+                            );
+                            print(
+                                "TOKEN BENİ HATIRLADAN DOLAYI HAFIZADA DURMAYA DEVAM EDİYOR");
+                            Future.delayed(const Duration(seconds: 3), () {
+                              Navigator.pushNamed(context, MainPage.routeName);
+                            });
+
+                            //print("giriş başarılı");
+                          } else if (_isChecked == false) {
+                            //BENİ HATIRLA KONTROLÜ SAĞLANIYOR VE KULLANICI BENİ HATIRLAYI İŞARETLEMEDİYSE KAYDEDİLEN SHARED CLEAR İLE TEMİZLENİYOR
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.clear();
+                            print(
+                                "TOKEN BENİ HATIRLA İŞARETLENMEDİĞİNDEN DOLAYI HAFIZADAN ÖLDÜRÜLÜYOR");
+
+                            print("token kaydedilmedi");
                             showTopSnackBar(
                               context,
                               const CustomSnackBar.success(
@@ -235,15 +263,21 @@ class _LoginPageState extends State<LoginPage> {
     //print("Handle Rember Me");
     _isChecked = checkBoxState!;
     print("Shared pref called");
+
+    _storeOnboardInfo(userToken);
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     SharedPreferences.getInstance().then(
       (prefs) {
         prefs.setBool("remember_me", checkBoxState);
-        prefs.setString('email', emailController.text);
         prefs.setString('password', passwordController.text);
       },
     );
+    print(prefs.getString('token'));
+
     setState(() {
+      print(prefs.getString('token'));
+
       _isChecked = checkBoxState;
     });
   }

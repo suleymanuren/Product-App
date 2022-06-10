@@ -31,7 +31,7 @@ print("kaydedilen product id $counter");
       Map<String, dynamic> json =jsonDecode(response.body);
       productDetailTest.product = Product.fromJson(json['product']);
 
-print("gelen veri$productDetailTest");
+
       return productDetailTest;
     }
     throw Exception();

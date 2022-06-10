@@ -15,6 +15,8 @@ class ProductDetailModel {
     }
     return data;
   }
+    List<Likes>? likes;
+
 }
 
 class Product {
@@ -63,6 +65,8 @@ class Product {
     }
     return data;
   }
+
+  map(Likes Function(dynamic item) param0) {}
 }
 
 class Likes {

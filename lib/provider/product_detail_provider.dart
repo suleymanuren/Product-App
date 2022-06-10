@@ -13,6 +13,7 @@ class ProductDetailProvider extends ChangeNotifier {
     await denemeStateService.getProductDetailModel().then((value) => {
       denemeStateModel.product = value.product,
 
+
       notifyListeners(),
     });
     //loading =false;
