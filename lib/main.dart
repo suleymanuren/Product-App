@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-      home: userToken=="süleyman" || userToken==null ? LoginPage() : MainPage(),
+        home: userToken=="süleyman" || userToken==null ? SplashPage() : MainPage(),
         routes: routes,
       ),
     );

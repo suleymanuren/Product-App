@@ -25,7 +25,20 @@ class _MainPageState extends State<MainPage> {
   AllProducts productStateModel = AllProducts();
   SearchApiService searchStateService = SearchApiService();
   AllProducts allProducts = AllProducts();
+  @override
+  initState() {
+    // TODO: implement initState
+    super.initState();
+    splashBeforeMain();
+  }
+  Future splashBeforeMain() async {
+    
+    Future.delayed(Duration(seconds: 3), () {
+      
+     Navigator.pushReplacementNamed(context, MainPage.routeName);
 
+    });
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -88,6 +101,8 @@ class _MainPageState extends State<MainPage> {
                                           topLeft: Radius.circular(10.0)),
                                     ),
                                   )),
+                      
+                              
                               Flexible(
                                 flex: 2,
                                 child: Container(

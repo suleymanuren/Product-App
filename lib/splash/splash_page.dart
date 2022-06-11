@@ -25,8 +25,9 @@ class _SplashPageState extends State<SplashPage> {
 
 
   Future saveSharedLoggingControl() async {
+    
     Future.delayed(Duration(seconds: 3), () {
-     //Navigator.pushReplacementNamed(context, BottomAppBarPage.routeName);
+      
      Navigator.pushReplacementNamed(context, LoginPage.routeName);
 
     });
