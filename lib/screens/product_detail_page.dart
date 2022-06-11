@@ -136,9 +136,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                                 " TL"
                                             : "boş değer döndü",
                                         style: TextStyle(
+                                          letterSpacing: 2,
+                                          wordSpacing: 2,
                                             fontWeight: FontWeight.w500,
                                             fontSize:
-                                                SizeConfig.screenWidth * .04),
+                                                SizeConfig.screenWidth * .05),
                                       ),
                                       SizedBox(
                                         height: SizeConfig.screenHeight * .02,
@@ -151,7 +153,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Icon(
-                                              Icons.location_on_outlined,
+                                              Icons.access_time,
                                               size:
                                                   SizeConfig.screenWidth * .04,
                                             ),
@@ -186,7 +188,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                         height: 10.0,
                                       ),
                                       Container(
-                                        color: Colors.red,
+                                        color: Colors.red.shade100.withOpacity(0.4),
                                         height: SizeConfig.screenHeight * .35,
                                         width: SizeConfig.screenWidth,
                                         child: Text(

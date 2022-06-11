@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:product_app/ui/responsive.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import '../../main_page/main_page.dart';
+import '../../screens/main_page.dart';
 import '../../ui/register_password_doesnt_match.dart';
 import '../../ui/validators.dart';
 import 'login_page.dart';

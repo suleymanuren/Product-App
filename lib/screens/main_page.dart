@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +8,8 @@ import '../provider/product_provider.dart';
 import '../services/product_service.dart';
 import 'product_detail_page.dart';
 import '../ui/responsive.dart';
+import 'package:http/http.dart' as http;
+
 Future<void> saveData(productID) async {
   // productID hafızaya yazdıran fonksiyon
   var sharedPreferences = await SharedPreferences.getInstance();
@@ -25,20 +29,7 @@ class _MainPageState extends State<MainPage> {
   AllProducts productStateModel = AllProducts();
   SearchApiService searchStateService = SearchApiService();
   AllProducts allProducts = AllProducts();
-  @override
-  initState() {
-    // TODO: implement initState
-    super.initState();
-    splashBeforeMain();
-  }
-  Future splashBeforeMain() async {
-    
-    Future.delayed(Duration(seconds: 3), () {
-      
-     Navigator.pushReplacementNamed(context, MainPage.routeName);
 
-    });
-  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -100,9 +91,64 @@ class _MainPageState extends State<MainPage> {
                                           topRight: const Radius.circular(10.0),
                                           topLeft: Radius.circular(10.0)),
                                     ),
-                                  )),
-                      
+                                      child: Align(alignment: Alignment.bottomRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                                    height: SizeConfig.screenHeight * .05,
+                                width: SizeConfig.screenWidth * .1,
+                                decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          offset: Offset(0, 2),
+                                          color: Colors.blue.withOpacity(.7),
+                                        ),
+                                      ]),
+                                      child: IconButton(
+                                        icon: Icon(Icons.favorite),
+                                        iconSize: SizeConfig.screenHeight * .027,
+                                        color: Colors.white, 
+                                        
+                                        onPressed: () async {  
+
+                                                                   
+                                var sharedPreferences = await SharedPreferences
+                                        .getInstance(); // product id çekmek için
+                                final String? counter =
+                                        sharedPreferences.getString('counter');
+                                Map data = {
+                                      'productId': counter,
+                                };
+
+                                String body = json.encode(data);
+                                var url =
+                                        'https://assignment-api.piton.com.tr/api/v1/product/like';
+                                var response = await http.post(
+                                      Uri.parse(url),
+                                      body: body,
+                                      headers: {
+                                        'accept': 'application/json',
+                                        'access-token':
+                                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN1bGV5bWFudXJlbjA3QGdtYWlsLmNvbSIsImlhdCI6MTY1NDY1NTIzNSwiZXhwIjoxNjgwNTc1MjM1fQ.L3t4E-x-IWlT1wjRx3WNzp-ecX-MsntIl-tRiD9zZmg',
+                                        'Content-Type': 'application/json',
+                                      },
+                                );
+                                print(response.body+"işlem başarılı oluyor fakat like sistemini kuramadım");
+                                if (response.statusCode == 200) {
+
+
+                                } else {
+                                      //print('error');
+                                }
                               
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                  )
+                                  ),
                               Flexible(
                                 flex: 2,
                                 child: Container(

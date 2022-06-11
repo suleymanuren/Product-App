@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:product_app/login/register/register_page.dart';
-import 'package:product_app/main.dart';
-import 'package:product_app/main_page/main_page.dart';
+import 'package:product_app/screens/main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -44,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override

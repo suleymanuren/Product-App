@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../login/register/login_page.dart';
-import '../main_page/main_page.dart';
+import '../screens/main_page.dart';
 import '../ui/responsive.dart';
 
 class SplashPage extends StatefulWidget {

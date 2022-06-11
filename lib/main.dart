@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:product_app/login/register/login_page.dart';
-import 'package:product_app/main_page/main_page.dart';
+import 'package:product_app/screens/main_page.dart';
 import 'package:product_app/provider/product_detail_provider.dart';
 import 'package:product_app/provider/product_provider.dart';
 import 'package:product_app/splash/splash_page.dart';
@@ -15,7 +15,7 @@ void main() async{
  WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   userToken = prefs.getString('token');
-  print(userToken);
+  print("USER TOKEN $userToken");
   runApp(const MyApp());
 }
 
